@@ -1,0 +1,81 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    <meta charset="utf-8" />
+    <title>ALOK</title>
+</head>
+<body>
+    
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">Java Scipt Based Call </h5>
+            <p class="card-text">This will calculate fibonicci  series using javascript recursive method.</p>
+            <input type="text" id="jsInutNumber" placeholder="Enter integer less than 50 " />
+            <button type="button" class="btn btn-primary" onclick="jsFibCalc()">Generate Fib</button>
+            <input type="text" id="jsResultNumber" />
+            <p id="consoleMessageJS"></p>
+        </div>
+    </div>
+    <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title">C based  Web Assembly</h5>
+            <p class="card-text">This will calculate fibonicci series using C  recursive method. </br>This internally called C module</p>
+            <input type="text" id="jsInutWasmNumber"  placeholder="Enter integer less than 50 " />
+            <button type="button" onclick="wasmCalc()" class="btn btn-primary">Generate Fib</button>
+            <input type="text" id="jsResultWasmNumber" />
+            <p id="consoleMessageWasm"></p>
+        </div>
+    </div>
+   
+
+
+    <script src="demo.js"></script>
+
+
+    <script>
+        function wasmCalc() {
+            var t0 = performance.now();
+            var n = document.getElementById("jsInutWasmNumber").value;
+            var s = _fibGenerator(n);
+            document.getElementById("jsResultWasmNumber").value = s;
+            var t1 = performance.now();
+            document.getElementById("consoleMessageWasm").innerHTML = "Call to _fibGenerator took " + (t1 - t0) + " milliseconds.";
+        }
+
+        function jsFibCalc() {
+            var t0 = performance.now();
+            var n = document.getElementById("jsInutNumber").value;
+            var k = jsFib(n);
+            document.getElementById("jsResultNumber").value = k;
+            var t1 = performance.now();
+            document.getElementById("consoleMessageJS").innerHTML = "Call to _fibGenerator took " + (t1 - t0) + " milliseconds.";
+
+
+        }
+
+        function jsFib(num) {
+            if (num <= 1) return 1;
+            return jsFib(num - 1) + jsFib(num - 2);
+        }
+
+        function first() {
+            alert('ALok');
+            fetch('/mathsquare.wasm')
+                .then((res) => { console.log(res); return res.arrayBuffer(); })
+                .then((wasmBuffer) => { return WebAssembly.instantiate(wasmBuffer); })
+                .then(({ instance, module }) => {
+                    console.log("In Wasm");
+                    console.log("From Method", instance.exports.square(2));
+                })
+
+        }
+    </script>
+
+</body>
+</html>
